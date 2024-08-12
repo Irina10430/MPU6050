@@ -67,7 +67,7 @@ float b0 = 0.001;
 
 void loop() {
 
-if(0){    //////////// Accelerometer test
+if(1){    //////////// Accelerometer test
   ax = ax*(1-b) + b*Read_reg(Acc_X)/16384.0;
   ay = ay*(1-b) + b*Read_reg(Acc_Y)/16384.0;
   az = az*(1-b) + b*Read_reg(Acc_Z)/16384.0;
@@ -114,7 +114,7 @@ else
   Serial.print(angle_z);
   Serial.println("; She's beautiful...");
 }
-  delay(100);
+  delay(1000);
   
   if(Read_reg(Acc_Z)==0) // reset MPU when hang
   {
