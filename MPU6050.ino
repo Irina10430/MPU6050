@@ -8,6 +8,9 @@
 #define Acc_Y 0x3D
 #define Acc_Z 0x3F
 
+#define FS_SEL 125.0
+#define CALIBRATE_NUM 500
+
 //#define M_PI 3.14159265358
 
 const int mpu_addr=0x68;  // I2C address of the MPU-6050
@@ -56,7 +59,7 @@ float angle_y0 = 0;
 float angle_z0 = 0;
 float b0 = 0.001;
 
-#define CALIBRATE_NUM 500
+
 unsigned long old_micros;
 
 void setup()
@@ -70,15 +73,17 @@ void setup()
   Serial.begin(115200);
   Serial.println("MPU-6050 test begin");
 
+  
+
   Serial.println("Calibrate begin");
   w_x0 = 0;
   w_y0 = 0;
   w_z0 = 0;
     for(int i=0; i<CALIBRATE_NUM; i++)
     {
-      w_x0 += Read_reg(Gyro_X)/250.0;
-      w_y0 += Read_reg(Gyro_Y)/250.0;
-      w_z0 += Read_reg(Gyro_Z)/250.0;
+      w_x0 += Read_reg(Gyro_X)/FS_SEL;
+      w_y0 += Read_reg(Gyro_Y)/FS_SEL;
+      w_z0 += Read_reg(Gyro_Z)/FS_SEL;
       delay(10);
     }
   w_x0 /= CALIBRATE_NUM;
@@ -89,9 +94,9 @@ void setup()
 }
 
 void loop() {
-    w_x = Read_reg(Gyro_X)/250.0 - w_x0;
-    w_y = Read_reg(Gyro_Y)/250.0 - w_y0;
-    w_z = Read_reg(Gyro_Z)/250.0 - w_z0;
+    w_x = Read_reg(Gyro_X)/FS_SEL - w_x0;
+    w_y = Read_reg(Gyro_Y)/FS_SEL - w_y0;
+    w_z = Read_reg(Gyro_Z)/FS_SEL - w_z0;
 
     unsigned long time_micros = micros();
     float dt = (time_micros - old_micros)/1000000.0;
